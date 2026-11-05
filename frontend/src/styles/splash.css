@@ -1,0 +1,26 @@
+.splash {
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    #fff4a8 0%,
+    #ffd84d 50%,
+    #ffbd35 100%
+  );
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.splash__tagline {
+  margin-top: 24px;
+  color: #70420b;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: center;
+}

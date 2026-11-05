@@ -1,0 +1,40 @@
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.brand__mascot {
+  width: 280px;
+  height: 280px;
+  object-fit: contain;
+}
+
+.brand__title {
+  margin: 12px 0 0;
+  color: #171717;
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -2px;
+}
+
+.brand--large .brand__mascot {
+  width: 340px;
+  height: 340px;
+}
+
+.brand--large .brand__title {
+  font-size: 76px;
+}
+
+.brand--small .brand__mascot {
+  width: 120px;
+  height: 120px;
+}
+
+.brand--small .brand__title {
+  font-size: 36px;
+}
