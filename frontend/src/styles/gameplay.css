@@ -1,0 +1,227 @@
+
+/* Main Gameplay Layout */
+.gameplay-page {
+  width: 100%;
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: 0.8fr 0.25fr 1.7fr;
+  align-items: center;
+  gap: 25px;
+  padding: 30px 4%;
+  padding-bottom: 65px;
+  box-sizing: border-box;
+  position: relative;
+
+  background: linear-gradient(
+    135deg,
+    #fff500 0%,
+    #fff76b 45%,
+    #ffffff 100%
+  );
+}
+
+/* Left: Player Section */
+
+.gameplay-player {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 25px;
+}
+
+.player-avatar {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #dedede;
+  font-size: 32px;
+}
+
+.player-name {
+  margin: 10px 0 0;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.jumping-monkey {
+  width: 100%;
+  max-width: 350px;
+  height: 430px;
+  margin-top: 25px;
+  object-fit: contain;
+}
+
+/* Middle: Progress Section */
+
+.gameplay-progress {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 30px;
+}
+
+.progress-banana {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+.progress-line {
+  width: 5px;
+  height: 350px;
+  background: #d4a900;
+  border-radius: 10px;
+  position: relative;
+}
+
+.progress-marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid #d4a900;
+  overflow: hidden;
+}
+
+.progress-marker img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Right: Puzzle Section */
+
+.gameplay-puzzle {
+  width: 100%;
+  max-width: 780px;
+  min-height: 720px;
+  padding: 32px 40px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+/* Puzzle Header */
+
+.puzzle-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.puzzle-header h2 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.lives {
+  font-size: 32px;
+  color: #e83c3c;
+  letter-spacing: 5px;
+}
+
+/* Timer Bar */
+
+.timer-bar {
+  width: 100%;
+  height: 12px;
+  margin-top: 22px;
+  background: rgba(150, 130, 40, 0.2);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.timer-bar__progress {
+  width: 75%;
+  height: 100%;
+  background: #ffc400;
+  border-radius: 20px;
+}
+
+/* Puzzle Image Placeholder */
+.puzzle-image-placeholder {
+  width: 100%;
+  height: 280px;
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 2px dashed rgba(180, 150, 30, 0.5);
+}
+
+.puzzle-image-placeholder span {
+  font-size: 15px;
+  font-weight: 700;
+  color: #777;
+  text-align: center;
+}
+
+/* Instruction */
+
+.puzzle-instruction {
+  margin: 22px 0;
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* Number Board */
+
+.number-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+.number-button {
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 12px;
+  background: white;
+  font-size: 22px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.number-button:hover {
+  background: #ffeb00;
+  transform: translateY(-3px);
+}
+
+/* Bottom Tagline */
+
+.gameplay-tagline {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 17px;
+  font-weight: 900;
+}

@@ -1,0 +1,169 @@
+/* Main Home Page */
+
+.home-page {
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 70px;
+  padding: 40px 9%;
+  box-sizing: border-box;
+
+  background: linear-gradient(
+    135deg,
+    #fff500 0%,
+    #fff76b 45%,
+    #ffffff 100%
+  );
+}
+
+/* Left Branding Section */
+
+.home-branding {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+.home-branding__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+.home-branding__logo img {
+  width: 270px;
+  height: 270px;
+  object-fit: contain;
+}
+.home-branding__logo h1 {
+  color: #000000;
+  font-size: 76px;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.home-branding__tagline {
+  margin-top: 85px;
+  color: #000000;
+  font-size: 30px;
+  font-weight: 900;
+  text-align: center;
+}
+
+/* Right Menu Panel */
+.home-menu {
+  width: 420px;
+  flex-shrink: 0;
+  padding: 28px;
+  box-sizing: border-box;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Profile Header */
+
+.home-menu__profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.profile-icon {
+  width: 55px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #dedede;
+  font-size: 26px;
+}
+
+.home-menu__profile h2 {
+  color: #000000;
+  font-size: 23px;
+  font-weight: 900;
+}
+
+/* Menu Content */
+
+.home-menu__content {
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.menu-button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #222222;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.menu-button:hover {
+  background: #fff3a0;
+  transform: translateY(-2px);
+}
+
+/* Let's Play Button */
+
+.play-button-wrapper {
+  position: relative;
+  margin-top: 60px;
+}
+
+.play-button {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #a88c00;
+  border-radius: 14px;
+  background: #ffeb00;
+  color: #000000;
+  font-size: 30px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.play-button:hover {
+  background: #ffd900;
+  transform: translateY(-3px);
+}
+
+.play-button__mascot {
+  position: absolute;
+  width: 115px;
+  height: 115px;
+  object-fit: contain;
+  right: -35px;
+  top: -75px;
+  pointer-events: none;
+}
+
+/* Menu Tagline */
+
+.home-menu__tagline {
+  margin-top: 12px;
+  color: #000000;
+  font-size: 12px;
+  font-weight: 900;
+  text-align: center;
+}

@@ -1,19 +1,7 @@
-import { useState } from 'react'
-import Login from './pages/Login'
-import Signup from './pages/Signup'
+import Gameplay from './pages/Gameplay'
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<'login' | 'signup'>('login')
-
-  return (
-    <>
-      {currentPage === 'login' ? (
-        <Login onSignup={() => setCurrentPage('signup')} />
-      ) : (
-        <Signup onLogin={() => setCurrentPage('login')} />
-      )}
-    </>
-  )
+  return <Gameplay />
 }
 
 export default App
