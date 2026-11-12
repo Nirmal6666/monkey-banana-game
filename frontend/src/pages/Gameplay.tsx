@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { CSSProperties } from 'react'
 
 import jumpingMonkey from '../assets/images/jumping-monkey.png'
@@ -6,6 +6,8 @@ import bananaDecoration from '../assets/images/banana-decoration.png'
 import monkeyFace from '../assets/images/monkey-face.png'
 import { levels } from '../data/levels'
 import '../styles/gameplay.css'
+import { getPuzzle, checkAnswer } from '../services/puzzleService'
+import type { Puzzle } from '../services/puzzleService'
 
 type GameplayProps = {
   onBack: () => void
@@ -17,7 +19,30 @@ const MAX_LIVES = 3
 function Gameplay({ onBack, playerName = 'Player' }: GameplayProps) {
   const [currentLevel, setCurrentLevel] = useState(1)
   const [currentPuzzle, setCurrentPuzzle] = useState(1)
-  const [lives] = useState(MAX_LIVES) // TODO: decrease on wrong answers
+ const [lives, setLives] = useState(MAX_LIVES)
+const [isChecking, setIsChecking] = useState(false) // TODO: decrease on wrong answers
+
+  const [puzzle, setPuzzle] = useState<Puzzle | null>(null)
+const [isLoading, setIsLoading] = useState(true)
+const [error, setError] = useState<string | null>(null)
+  
+  useEffect(() => {
+  async function loadPuzzle() {
+    try {
+      setIsLoading(true)
+      setError(null)
+
+      const newPuzzle = await getPuzzle()
+      setPuzzle(newPuzzle)
+    } catch (err) {
+      setError('Could not load the puzzle. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  loadPuzzle()
+}, [])
 
   const levelData = levels[currentLevel - 1]
   const progress = ((currentPuzzle - 1) / levelData.totalPuzzles) * 100
@@ -28,6 +53,29 @@ function Gameplay({ onBack, playerName = 'Player' }: GameplayProps) {
     } else if (currentLevel < levels.length) {
       setCurrentLevel((level) => level + 1)
       setCurrentPuzzle(1)
+    }
+  }
+    const handleAnswer = async (answer: number) => {
+    if (!puzzle || isChecking || lives === 0) return
+
+    try {
+      setIsChecking(true)
+      setError(null)
+
+      const result = await checkAnswer(puzzle.puzzleId, answer)
+
+      if (result.correct) {
+        handleCompletePuzzle()
+
+        const newPuzzle = await getPuzzle()
+        setPuzzle(newPuzzle)
+      } else {
+        setLives((previousLives) => previousLives - 1)
+      }
+    } catch (err) {
+      setError('Could not check your answer. Please try again.')
+    } finally {
+      setIsChecking(false)
     }
   }
 
@@ -119,29 +167,37 @@ function Gameplay({ onBack, playerName = 'Player' }: GameplayProps) {
           </div>
 
           <div className="puzzle-image-placeholder">
-            <span>Generated puzzle will appear here</span>
-          </div>
+                         {isLoading && <span>Loading puzzle...</span>}
+
+                         {error && <span>{error}</span>}
+
+                     {puzzle && (
+                         <img
+                          src={puzzle.imageUrl}
+                            alt="Banana number puzzle"
+                             className="puzzle-image"
+                                 />
+                                     )}
+                                </div>
 
           <p className="puzzle-instruction">
             Guess the right answer to solve this puzzle
           </p>
 
           <div className="number-grid">
-            {Array.from({ length: 10 }, (_, index) => (
-              <button key={index} type="button" className="number-button">
-                {index}
-              </button>
-            ))}
-          </div>
+  {Array.from({ length: 10 }, (_, index) => (
+    <button
+      key={index}
+      type="button"
+      className="number-button"
+      onClick={() => handleAnswer(index)}
+      disabled={isChecking || isLoading || !puzzle || lives === 0}
+    >
+      {index}
+    </button>
+  ))}
+</div>
 
-          {/* Dev-only: remove once real answer checking exists */}
-          <button
-            type="button"
-            className="dev-button"
-            onClick={handleCompletePuzzle}
-          >
-            Test Next Puzzle
-          </button>
         </section>
       </div>
 
