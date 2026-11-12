@@ -7,7 +7,9 @@ const app = express()
 const PORT = 5000
 
 // Allow requests from our React frontend
-app.use(cors({ origin: 'http://localhost:5173' }))
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:5174']
+}))
 app.use(express.json())
 
 // Store puzzle solutions on the backend

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { CSSProperties } from 'react'
+import ResultDialog from '../components/ResultDialog'
 
 import jumpingMonkey from '../assets/images/jumping-monkey.png'
 import bananaDecoration from '../assets/images/banana-decoration.png'
@@ -21,6 +22,7 @@ function Gameplay({ onBack, playerName = 'Player' }: GameplayProps) {
   const [currentPuzzle, setCurrentPuzzle] = useState(1)
  const [lives, setLives] = useState(MAX_LIVES)
 const [isChecking, setIsChecking] = useState(false) // TODO: decrease on wrong answers
+  const [result, setResult] = useState<'won' | 'lost' | null>(null)
 
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null)
 const [isLoading, setIsLoading] = useState(true)
@@ -63,22 +65,73 @@ const [error, setError] = useState<string | null>(null)
       setError(null)
 
       const result = await checkAnswer(puzzle.puzzleId, answer)
+if (result.correct) {
+  if (currentPuzzle < levelData.totalPuzzles) {
+    setCurrentPuzzle((previous) => previous + 1)
 
-      if (result.correct) {
-        handleCompletePuzzle()
+    const newPuzzle = await getPuzzle()
+    setPuzzle(newPuzzle)
+  } else {
+    setResult('won')
+  }
+} else {
+  setLives((previousLives) => {
+    const remainingLives = previousLives - 1
 
-        const newPuzzle = await getPuzzle()
-        setPuzzle(newPuzzle)
-      } else {
-        setLives((previousLives) => previousLives - 1)
-      }
+    if (remainingLives === 0) {
+      setResult('lost')
+    }
+
+    return remainingLives
+  })
+}
     } catch (err) {
       setError('Could not check your answer. Please try again.')
     } finally {
       setIsChecking(false)
     }
   }
+       const handleNextRound = async () => {
+    if (currentLevel >= levels.length) {
+      onBack()
+      return
+    }
 
+    setCurrentLevel((level) => level + 1)
+    setCurrentPuzzle(1)
+    setLives(MAX_LIVES)
+    setResult(null)
+
+    try {
+      setIsLoading(true)
+      setError(null)
+
+      const newPuzzle = await getPuzzle()
+      setPuzzle(newPuzzle)
+    } catch (err) {
+      setError('Could not load the next puzzle. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+          const handleRetry = async () => {
+    setCurrentPuzzle(1)
+    setLives(MAX_LIVES)
+    setResult(null)
+
+    try {
+      setIsLoading(true)
+      setError(null)
+
+      const newPuzzle = await getPuzzle()
+      setPuzzle(newPuzzle)
+    } catch (err) {
+      setError('Could not load a new puzzle. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
   return (
     <main className="gameplay-page">
       <header className="gameplay-topbar">
@@ -200,7 +253,14 @@ const [error, setError] = useState<string | null>(null)
 
         </section>
       </div>
-
+             {result && (
+        <ResultDialog
+          result={result}
+          onNext={handleNextRound}
+          onRetry={handleRetry}
+          onClose={onBack}
+        />
+      )}
       <footer className="gameplay-tagline">Think Smart. Go Bananas!</footer>
     </main>
   )
