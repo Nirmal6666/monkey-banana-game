@@ -1,0 +1,13 @@
+
+### Test 1: Generate a new puzzle
+GET http://localhost:5000/api/puzzle
+
+
+### Test 2: Submit an answer
+POST http://localhost:5000/api/puzzle/answer
+Content-Type: application/json
+
+{
+  "puzzleId": "cdbad451-e7c2-42f1-ba58-a4288b810ff8",
+  "answer": 5
+}
