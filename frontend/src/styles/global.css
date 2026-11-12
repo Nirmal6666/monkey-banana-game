@@ -1,0 +1,61 @@
+:root {
+  --font: 'Nunito', ui-rounded, 'SF Pro Rounded', system-ui, -apple-system,
+    'Segoe UI', Roboto, sans-serif;
+  /* Side padding that also centers content in a 1200px column on wide screens */
+  --page-x: max(clamp(20px, 5vw, 64px), calc((100% - 1200px) / 2));
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: #202020;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 3px solid #70420b;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+:root {
+  --page-x: max(clamp(20px, 5vw, 64px), calc((100vw - 1200px) / 2));
+}

@@ -1,83 +1,151 @@
+import { useState } from 'react'
+import type { CSSProperties } from 'react'
 
 import jumpingMonkey from '../assets/images/jumping-monkey.png'
 import bananaDecoration from '../assets/images/banana-decoration.png'
 import monkeyFace from '../assets/images/monkey-face.png'
-
+import { levels } from '../data/levels'
 import '../styles/gameplay.css'
 
-function Gameplay() {
+type GameplayProps = {
+  onBack: () => void
+  playerName?: string
+}
+
+const MAX_LIVES = 3
+
+function Gameplay({ onBack, playerName = 'Player' }: GameplayProps) {
+  const [currentLevel, setCurrentLevel] = useState(1)
+  const [currentPuzzle, setCurrentPuzzle] = useState(1)
+  const [lives] = useState(MAX_LIVES) // TODO: decrease on wrong answers
+
+  const levelData = levels[currentLevel - 1]
+  const progress = ((currentPuzzle - 1) / levelData.totalPuzzles) * 100
+
+  const handleCompletePuzzle = () => {
+    if (currentPuzzle < levelData.totalPuzzles) {
+      setCurrentPuzzle((puzzle) => puzzle + 1)
+    } else if (currentLevel < levels.length) {
+      setCurrentLevel((level) => level + 1)
+      setCurrentPuzzle(1)
+    }
+  }
+
   return (
     <main className="gameplay-page">
+      <header className="gameplay-topbar">
+        <button type="button" className="gameplay-back-button" onClick={onBack}>
+          ← Back
+        </button>
 
-      {/* Left: Player Section */}
-      <section className="gameplay-player">
+        <div className="player-chip">
+          <div className="player-avatar" aria-hidden="true">♙</div>
+          <p className="player-name">{playerName}</p>
+        </div>
+      </header>
 
-        <div className="player-avatar">♙</div>
+      <div className="gameplay-board">
+        {/* Left: hero monkey (hidden on small screens) */}
+        <section className="gameplay-hero" aria-hidden="true">
+          <img
+            src={jumpingMonkey}
+            alt=""
+            className="jumping-monkey"
+          />
+        </section>
 
-        <p className="player-name">Sachintha</p>
+        {/* Middle: progress track. The monkey climbs toward the banana */}
+        <section className="gameplay-progress" aria-label="Level progress">
+          <img
+            src={bananaDecoration}
+            alt=""
+            aria-hidden="true"
+            className="progress-banana"
+          />
 
-        <img
-          src={jumpingMonkey}
-          alt="Monkey jumping towards a banana"
-          className="jumping-monkey"
-        />
+          <div
+            className="progress-line"
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(progress)}
+            aria-label={`Puzzle ${currentPuzzle} of ${levelData.totalPuzzles}`}
+            style={{ '--progress': `${progress}%` } as CSSProperties}
+          >
+            <div className="progress-line__fill" />
 
-      </section>
+            {Array.from({ length: levelData.checkpoints }, (_, index) => (
+              <div
+                key={index}
+                className="progress-checkpoint"
+                style={
+                  {
+                    '--progress': `${((index + 1) / (levelData.checkpoints + 1)) * 100}%`,
+                  } as CSSProperties
+                }
+              />
+            ))}
 
-      {/* Middle: Progress Section */}
-      <section className="gameplay-progress">
-
-        <img
-          src={bananaDecoration}
-          alt="Banana"
-          className="progress-banana"
-        />
-
-        <div className="progress-line">
-          <div className="progress-marker">
-            <img src={monkeyFace} alt="Monkey progress marker" />
+            <div className="progress-marker">
+              <img src={monkeyFace} alt="" />
+            </div>
           </div>
-        </div>
+        </section>
 
-      </section>
+        {/* Right: puzzle card */}
+        <section className="gameplay-puzzle" aria-label="Puzzle">
+          <div className="puzzle-header">
+            <h2>{levelData.name}</h2>
+            <div
+              className="lives"
+              role="img"
+              aria-label={`${lives} of ${MAX_LIVES} lives left`}
+            >
+              {Array.from({ length: MAX_LIVES }, (_, index) => (
+                <span key={index} className={index < lives ? '' : 'lives__lost'}>
+                  {index < lives ? '♥' : '♡'}
+                </span>
+              ))}
+            </div>
+          </div>
 
-      {/* Right: Puzzle Section */}
-      <section className="gameplay-puzzle">
+          <div className="puzzle-meta">
+            <p className="puzzle-counter">
+              Puzzle {currentPuzzle} of {levelData.totalPuzzles}
+            </p>
+            <div className="timer-bar" aria-hidden="true">
+              <div className="timer-bar__progress" />
+            </div>
+          </div>
 
-        <div className="puzzle-header">
-          <h2>Level One</h2>
-          <div className="lives">♡ ♡ ♡</div>
-        </div>
+          <div className="puzzle-image-placeholder">
+            <span>Generated puzzle will appear here</span>
+          </div>
 
-        {/* Timer Bar */}
-        <div className="timer-bar">
-          <div className="timer-bar__progress"></div>
-        </div>
+          <p className="puzzle-instruction">
+            Guess the right answer to solve this puzzle
+          </p>
 
-        {/* Puzzle Image Placeholder */}
-        <div className="puzzle-image-placeholder">
-          <span>Generated puzzle will appear here</span>
-        </div>
+          <div className="number-grid">
+            {Array.from({ length: 10 }, (_, index) => (
+              <button key={index} type="button" className="number-button">
+                {index}
+              </button>
+            ))}
+          </div>
 
-        <p className="puzzle-instruction">
-          Guess the right answer to solve this puzzle
-        </p>
+          {/* Dev-only: remove once real answer checking exists */}
+          <button
+            type="button"
+            className="dev-button"
+            onClick={handleCompletePuzzle}
+          >
+            Test Next Puzzle
+          </button>
+        </section>
+      </div>
 
-        {/* Number Board */}
-        <div className="number-grid">
-          {Array.from({ length: 10 }, (_, index) => (
-            <button key={index} className="number-button">
-              {index}
-            </button>
-          ))}
-        </div>
-
-      </section>
-
-      <p className="gameplay-tagline">
-        Think Smart. Go Bananas!
-      </p>
-
+      <footer className="gameplay-tagline">Think Smart. Go Bananas!</footer>
     </main>
   )
 }

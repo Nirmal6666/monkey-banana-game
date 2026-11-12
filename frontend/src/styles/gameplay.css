@@ -1,98 +1,148 @@
-
-/* Main Gameplay Layout */
 .gameplay-page {
-  width: 100%;
   min-height: 100svh;
   display: grid;
-  grid-template-columns: 0.8fr 0.25fr 1.7fr;
-  align-items: center;
-  gap: 25px;
-  padding: 30px 4%;
-  padding-bottom: 65px;
-  box-sizing: border-box;
-  position: relative;
-
-  background: linear-gradient(
-    135deg,
-    #fff500 0%,
-    #fff76b 45%,
-    #ffffff 100%
-  );
+  grid-template-rows: auto 1fr auto;
+  row-gap: clamp(8px, 2vh, 20px);
+  padding-block: max(16px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-bottom));
+  padding-inline: var(--page-x);
+  background: linear-gradient(135deg, #fff500 0%, #fff76b 45%, #ffffff 100%);
 }
 
-/* Left: Player Section */
+/* ---------- Top bar ---------- */
 
-.gameplay-player {
-  height: 100%;
+.gameplay-topbar {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  padding-top: 25px;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.gameplay-back-button {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.75);
+  color: #222;
+  font-size: 16px;
+  font-weight: 800;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.gameplay-back-button:hover {
+  background: #fff;
+  transform: translateX(-3px);
+}
+
+.player-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 18px 5px 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
 }
 
 .player-avatar {
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
   border-radius: 50%;
   background: #dedede;
-  font-size: 32px;
+  font-size: 22px;
 }
 
 .player-name {
-  margin: 10px 0 0;
-  font-size: 20px;
+  font-size: 1rem;
   font-weight: 900;
+}
+
+/* ---------- Board: hero | progress | puzzle ---------- */
+
+.gameplay-board {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 110px minmax(0, 1.5fr);
+  align-items: center;
+  column-gap: clamp(16px, 3vw, 40px);
+}
+
+.gameplay-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .jumping-monkey {
   width: 100%;
-  max-width: 350px;
-  height: 430px;
-  margin-top: 25px;
+  max-width: 360px;
+  max-height: min(58vh, 480px);
   object-fit: contain;
+  filter: drop-shadow(0 14px 16px rgba(112, 66, 11, 0.2));
 }
 
-/* Middle: Progress Section */
+/* ---------- Progress (--progress = how far along, 0-100%) ---------- */
 
 .gameplay-progress {
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding-bottom: 30px;
+  gap: 14px;
 }
 
 .progress-banana {
-  width: 100px;
-  height: 100px;
+  width: 84px;
+  height: 84px;
   object-fit: contain;
-  margin-bottom: 15px;
 }
 
 .progress-line {
-  width: 5px;
-  height: 350px;
-  background: #d4a900;
-  border-radius: 10px;
   position: relative;
+  width: 6px;
+  height: clamp(220px, 38vh, 380px);
+  border-radius: 999px;
+  background: #d4a900;
+}
+
+/* Filled part, from the bottom up */
+.progress-line__fill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: var(--progress);
+  border-radius: inherit;
+  background: #ff9f00;
+  transition: height 0.6s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+
+.progress-checkpoint {
+  position: absolute;
+  top: calc(100% - var(--progress));
+  left: 50%;
+  z-index: 1;
+  width: 22px;
+  height: 22px;
+  border: 3px solid #d4a900;
+  border-radius: 50%;
+  background: #fff;
+  transform: translate(-50%, -50%);
 }
 
 .progress-marker {
   position: absolute;
-  top: 50%;
+  top: calc(100% - var(--progress));
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  background: white;
-  border: 3px solid #d4a900;
+  z-index: 2;
+  width: 62px;
+  height: 62px;
   overflow: hidden;
+  border: 3px solid #d4a900;
+  border-radius: 50%;
+  background: #fff;
+  transform: translate(-50%, -50%);
+  transition: top 0.6s cubic-bezier(0.34, 1.3, 0.64, 1),
+              left 0.6s cubic-bezier(0.34, 1.3, 0.64, 1);
 }
 
 .progress-marker img {
@@ -101,112 +151,121 @@
   object-fit: contain;
 }
 
-/* Right: Puzzle Section */
+/* ---------- Puzzle card ---------- */
 
 .gameplay-puzzle {
   width: 100%;
-  max-width: 780px;
-  min-height: 720px;
-  padding: 32px 40px;
-  box-sizing: border-box;
-
+  max-width: 760px;
+  justify-self: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
-
+  gap: clamp(10px, 1.8vh, 18px);
+  padding: clamp(18px, 3vh, 32px) clamp(18px, 3vw, 40px);
   border-radius: 25px;
-  background: rgba(255, 255, 255, 0.48);
+  background: rgba(255, 255, 255, 0.62);
   border: 1px solid rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 8px 32px rgba(120, 100, 0, 0.12);
 }
-/* Puzzle Header */
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .gameplay-puzzle {
+    background: rgba(255, 255, 255, 0.48);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+  }
+}
 
 .puzzle-header {
-  width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .puzzle-header h2 {
-  margin: 0;
-  font-size: 30px;
+  font-size: clamp(1.5rem, 3vw, 1.875rem);
   font-weight: 900;
 }
 
 .lives {
-  font-size: 32px;
   color: #e83c3c;
-  letter-spacing: 5px;
+  font-size: 30px;
+  letter-spacing: 4px;
+  white-space: nowrap;
 }
 
-/* Timer Bar */
+.lives__lost {
+  opacity: 0.45;
+}
+
+.puzzle-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.puzzle-counter {
+  color: #6b5a00;
+  font-size: 15px;
+  font-weight: 800;
+}
 
 .timer-bar {
-  width: 100%;
   height: 12px;
-  margin-top: 22px;
-  background: rgba(150, 130, 40, 0.2);
-  border-radius: 20px;
   overflow: hidden;
+  border-radius: 20px;
+  background: rgba(150, 130, 40, 0.2);
 }
 
 .timer-bar__progress {
-  width: 75%;
+  width: 75%; /* TODO: drive from the real timer */
   height: 100%;
-  background: #ffc400;
   border-radius: 20px;
+  background: #ffc400;
+  transition: width 1s linear;
 }
 
-/* Puzzle Image Placeholder */
 .puzzle-image-placeholder {
-  width: 100%;
-  height: 280px;
-  margin-top: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+  height: clamp(150px, 24vh, 300px);
+  display: grid;
+  place-items: center;
+  padding: 12px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.65);
   border: 2px dashed rgba(180, 150, 30, 0.5);
 }
 
 .puzzle-image-placeholder span {
+  color: #6b6b6b;
   font-size: 15px;
   font-weight: 700;
-  color: #777;
   text-align: center;
 }
 
-/* Instruction */
-
 .puzzle-instruction {
-  margin: 22px 0;
   font-size: 16px;
   font-weight: 800;
   text-align: center;
 }
 
-/* Number Board */
+/* ---------- Number board ---------- */
 
 .number-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  width: 100%;
+  gap: clamp(8px, 1.4vw, 12px);
 }
 
 .number-button {
-  aspect-ratio: 1;
+  height: clamp(44px, 7.5vh, 64px);
   border: none;
   border-radius: 12px;
-  background: white;
-  font-size: 22px;
+  background: #fff;
+  color: #222;
+  font-size: clamp(1.125rem, 3vw, 1.5rem);
   font-weight: 900;
-  cursor: pointer;
-  transition: 0.2s ease;
+  box-shadow: 0 3px 0 rgba(168, 140, 0, 0.3);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
 }
 
 .number-button:hover {
@@ -214,14 +273,96 @@
   transform: translateY(-3px);
 }
 
-/* Bottom Tagline */
+.number-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(168, 140, 0, 0.3);
+}
+
+.dev-button {
+  align-self: center;
+  padding: 8px 16px;
+  border: 1px dashed rgba(0, 0, 0, 0.35);
+  border-radius: 10px;
+  background: transparent;
+  color: #444;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ---------- Footer ---------- */
 
 .gameplay-tagline {
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0;
   font-size: 17px;
   font-weight: 900;
+  text-align: center;
+}
+
+/* ---------- Tablet / mobile ---------- */
+
+@media (max-width: 960px) {
+  .gameplay-board {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    row-gap: 16px;
+  }
+
+  .gameplay-hero {
+    display: none;
+  }
+
+  /* Progress becomes a horizontal track, left to right */
+  .gameplay-progress {
+    flex-direction: row;
+    gap: 16px;
+    padding-inline: 24px;
+  }
+
+  .progress-banana {
+    order: 2;
+    width: 48px;
+    height: 48px;
+  }
+
+  .progress-line {
+    flex: 1;
+    width: auto;
+    height: 6px;
+  }
+
+  .progress-line__fill {
+    top: 0;
+    width: var(--progress);
+    height: 100%;
+  }
+
+  .progress-checkpoint,
+  .progress-marker {
+    top: 50%;
+    left: var(--progress);
+  }
+
+  .progress-marker {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gameplay-back-button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .gameplay-puzzle {
+    border-radius: 20px;
+  }
+
+  .lives {
+    font-size: 24px;
+    letter-spacing: 3px;
+  }
+
+  .gameplay-tagline {
+    font-size: 14px;
+  }
 }

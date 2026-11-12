@@ -1,40 +1,38 @@
 .brand {
+  --mascot-size: 120px;
+  --title-size: 2.25rem;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 12px;
   text-align: center;
 }
 
+/* Sizes follow both width and height, so the logo fits short screens too */
+.brand--large {
+  --mascot-size: clamp(140px, min(28vw, 36vh), 340px);
+  --title-size: clamp(2.5rem, min(6vw, 9vh), 4.75rem);
+}
+
 .brand__mascot {
-  width: 280px;
-  height: 280px;
+  width: var(--mascot-size);
+  height: var(--mascot-size);
   object-fit: contain;
+  filter: drop-shadow(0 12px 18px rgba(112, 66, 11, 0.25));
+  animation: brand-float 4s ease-in-out infinite;
 }
 
 .brand__title {
-  margin: 12px 0 0;
   color: #171717;
-  font-size: 64px;
+  font-size: var(--title-size);
   font-weight: 900;
   line-height: 0.95;
-  letter-spacing: -2px;
+  letter-spacing: -0.03em;
 }
 
-.brand--large .brand__mascot {
-  width: 340px;
-  height: 340px;
-}
-
-.brand--large .brand__title {
-  font-size: 76px;
-}
-
-.brand--small .brand__mascot {
-  width: 120px;
-  height: 120px;
-}
-
-.brand--small .brand__title {
-  font-size: 36px;
+@keyframes brand-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
 }

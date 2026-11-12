@@ -1,26 +1,84 @@
 .splash {
-  width: 100%;
+  position: relative;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    135deg,
-    #fff4a8 0%,
-    #ffd84d 50%,
-    #ffbd35 100%
-  );
-  padding: 20px;
-  box-sizing: border-box;
+  gap: clamp(14px, 3vh, 28px);
+  padding: max(24px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom));
   overflow: hidden;
+  cursor: pointer;
+  background: linear-gradient(135deg, #fff4a8 0%, #ffd84d 50%, #ffbd35 100%);
+  animation: splash-fade 500ms ease-out both;
+}
+
+.splash > :not(.splash__glow) {
+  position: relative; /* keep content above the glow */
+}
+
+.splash__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(90vw, 620px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 65%);
+  pointer-events: none;
+  animation: splash-glow 3s ease-in-out infinite alternate;
 }
 
 .splash__tagline {
-  margin-top: 24px;
   color: #70420b;
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: 1px;
+  font-size: clamp(1.125rem, 3.8vw, 1.625rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-align: center;
+  text-wrap: balance;
+  animation: splash-rise 700ms ease-out 300ms both;
+}
+
+.splash__tagline span {
+  color: #4a2a05;
+  font-weight: 900;
+}
+
+/* Loading bar: fills over the splash duration */
+.splash__loader {
+  width: min(240px, 60vw);
+  height: 10px;
+  margin-top: clamp(4px, 2vh, 20px);
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(112, 66, 11, 0.16);
+}
+
+.splash__loader-fill {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f5b91b, #a66d00);
+  transform-origin: left center;
+  animation: splash-load var(--duration, 2200ms) linear both;
+}
+
+@keyframes splash-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes splash-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes splash-glow {
+  from { opacity: 0.6; transform: translate(-50%, -50%) scale(0.95); }
+  to   { opacity: 1;   transform: translate(-50%, -50%) scale(1.05); }
+}
+
+@keyframes splash-load {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }

@@ -3,22 +3,26 @@ import '../styles/brand.css'
 
 type BrandProps = {
   size?: 'large' | 'small'
+  /** Use 'p' when the page already has its own <h1>. */
+  as?: 'h1' | 'p'
 }
 
-function Brand({ size = 'small' }: BrandProps) {
+function Brand({ size = 'small', as: Title = 'h1' }: BrandProps) {
   return (
     <div className={`brand brand--${size}`}>
       <img
         src={monkeyMascot}
-        alt="Banana Buddy monkey mascot"
+        alt=""
+        aria-hidden="true"
         className="brand__mascot"
+        decoding="async"
       />
 
-      <h1 className="brand__title">
-        Banana
+      <Title className="brand__title">
+        Banana{' '}
         <br />
         Buddy
-      </h1>
+      </Title>
     </div>
   )
 }
